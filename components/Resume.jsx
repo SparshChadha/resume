@@ -36,23 +36,22 @@ const Resume = forwardRef((props, ref) => {
     [sections.workExp]: (
       <div
         key={"workexp"}
-        className={`${styles.section} ${
-          info.workExp?.sectionTitle ? "" : styles.hidden
-        }`}
+        className={`${styles.section} ${info.workExp?.sectionTitle ? "" : styles.hidden}`}
       >
         <div className={styles.sectionTitle}>{info.workExp.sectionTitle}</div>
         <div className={styles.content}>
-          {info.workExp?.details?.map((item) => (
+        {info.workExp?.details?.filter((item) => item.points?.length >= 1).map((item) => (
             <div className={styles.item} key={item.title}>
               <div className={styles.itemHeader}>
-                {item.title && (
-                  <p className={styles.title}>{item.title}</p>
-                )}
-                {item.companyName && (
-                  <p className={styles.subTitle}>{item.companyName}</p>
-                )}
+                {item.title && <p className={styles.title}>{item.title}</p>}
+                {item.companyName && <p className={styles.subTitle}>{item.companyName}</p>}
               </div>
               <div className={styles.itemMeta}>
+                {item.certificationLink && (
+                  <p className={styles.link}>
+                    <Paperclip /> Certificate   
+                  </p>
+                )}
                 {item.startDate && item.endDate && (
                   <div className={styles.date}>
                     <Calendar /> {getFormattedDate(item.startDate)} - {getFormattedDate(item.endDate)}
@@ -81,36 +80,28 @@ const Resume = forwardRef((props, ref) => {
     [sections.project]: (
       <div
         key={"project"}
-        className={`${styles.section} ${
-          info.project?.sectionTitle ? "" : styles.hidden
-        }`}
+        className={`${styles.section} ${info.project?.sectionTitle ? "" : styles.hidden}`}
       >
         <div className={styles.sectionTitle}>{info.project.sectionTitle}</div>
         <div className={styles.content}>
           {info.project?.details?.map((item) => (
             <div className={styles.item} key={item.title}>
               <div className={styles.itemHeader}>
-                {item.title && (
-                  <p className={styles.title}>{item.title}</p>
-                )}
+                {item.title && <p className={styles.title}>{item.title}</p>}
               </div>
               <div className={styles.itemMeta}>
                 {item.link && (
                   <a className={styles.link} href={item.link}>
-                    <Paperclip />
-                    {item.link}
+                    <Paperclip /> Deployed Link
                   </a>
                 )}
                 {item.github && (
                   <a className={styles.link} href={item.github}>
-                    <GitHub />
-                    {item.github}
+                    <GitHub /> GitHub
                   </a>
                 )}
               </div>
-              {item.overview && (
-                <p className={styles.overview}>{item.overview}</p>
-              )}
+              {item.overview && <p className={styles.overview}>{item.overview}</p>}
               {item.points?.length > 0 && (
                 <ul className={styles.points}>
                   {item.points?.map((elem, index) => (
@@ -128,11 +119,9 @@ const Resume = forwardRef((props, ref) => {
     [sections.education]: (
       <div
         key={"education"}
-        className={`${styles.section} ${
-          info.education?.sectionTitle ? "" : styles.hidden
-        }`}
+        className={`${styles.section} ${info.education?.sectionTitle ? "" : styles.hidden}`}
       >
-        <div className={styles.sectionTitle}>{info.education?.sectionTitle}</div>
+        <div className={styles.sectionTitle}>{info.education.sectionTitle}</div>
         <div className={styles.content}>
           <table className={styles.educationTable}>
             <thead>
@@ -160,51 +149,19 @@ const Resume = forwardRef((props, ref) => {
     [sections.achievement]: (
       <div
         key={"achievement"}
-        className={`${styles.section} ${
-          info.achievement?.sectionTitle ? "" : styles.hidden
-        }`}
+        className={`${styles.section} ${info.achievement?.sectionTitle ? "" : styles.hidden}`}
       >
         <div className={styles.sectionTitle}>{info.achievement.sectionTitle}</div>
         <div className={styles.content}>
-          {info.achievement?.points?.length > 0 && (
-            <ul className={styles.points}>
-              {info.achievement?.points?.map((elem, index) => (
-                <li className={styles.point} key={elem + index}>
-                  {elem}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    ),
-    [sections.positionOfResponsibility]: (
-      <div
-        key={"positionOfResponsibility"}
-        className={`${styles.section} ${
-          info.positionOfResponsibility?.sectionTitle ? "" : styles.hidden
-        }`}
-      >
-        <div className={styles.sectionTitle}>{info.positionOfResponsibility.sectionTitle}</div>
-        <div className={styles.content}>
-          {info.positionOfResponsibility?.details?.map((item, index) => (
-            <div className={styles.item} key={index}>
-              {/* Render position of responsibility details */}
-              <div className={styles.itemHeader}>
-                <p className={styles.title}>{item.title}</p>
-              </div>
-              <div className={styles.itemMeta}>
-                {/* Render other details specific to position of responsibility */}
-              </div>
-              {item.points?.length > 0 && (
-                <ul className={styles.points}>
-                  {item.points.map((elem, index) => (
-                    <li className={styles.point} key={index}>
-                      {elem}
-                    </li>
-                  ))}
-                </ul>
-              )}
+          {info.achievement?.details?.map((item) => (
+            <div key={item.title} className={styles.achievementItem}>
+              <h3 className={styles.achievementTitle}>{item.title}</h3>
+              <p className={styles.achievementOverview}>{item.overview}</p>
+              <ul className={styles.points}>
+                {item.points?.map((point, index) => (
+                  <li key={point + index}>{point}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
@@ -214,16 +171,51 @@ const Resume = forwardRef((props, ref) => {
     [sections.other]: (
       <div
         key={"other"}
-        className={`${styles.section} ${
-          info.other?.sectionTitle ? "" : styles.hidden
-        }`}
+        className={`${styles.section} ${info.other?.sectionTitle ? "" : styles.hidden}`}
       >
         <div className={styles.sectionTitle}>{info.other.sectionTitle}</div>
         <div className={styles.content}>
-          <p className={styles.overview}>{info?.other?.detail}</p>
+          <ul className={styles.points}>
+            {info?.other?.details && info.other.details.map((detail, index) => (
+              <li key={index} className={styles.point}>
+                {detail}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     ),
+    
+    [sections.positionOfResponsibility]: (
+      <div
+        key={"positionOfResponsibility"}
+        className={`${styles.section} ${info.positionOfResponsibility?.sectionTitle ? "" : styles.hidden}`}
+      >
+        <div className={styles.sectionTitle}>{info.positionOfResponsibility.sectionTitle}</div>
+        <div className={styles.content}>
+          {info.positionOfResponsibility?.details?.map((item, index) => (
+            <div className={styles.item} key={index}>
+              <div className={styles.itemHeader}>
+                <p className={styles.title}>{item.title}</p>
+              </div>
+              {item.points?.length > 0 && (
+                <ul className={styles.points}>
+                  {item.points
+                    .filter((point) => point) // Filter out empty points
+                    .map((elem, index) => (
+                      <li className={styles.point} key={index}>
+                        {elem}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    
+
   };
 
   useEffect(() => {
@@ -239,26 +231,26 @@ const Resume = forwardRef((props, ref) => {
           <p className={styles.heading}>{info.basicInfo?.detail?.name}</p>
           <p className={styles.subHeading}>{info.basicInfo?.detail?.title}</p>
           <div className={styles.links}>
-            {info.basicInfo?.detail?.email && (
-              <a className={styles.link} type="email">
-                <AtSign /> {info.basicInfo?.detail?.email}
-              </a>
-            )}
-            {info.basicInfo?.detail?.phone && (
-              <a className={styles.link}>
-                <Phone /> {info.basicInfo?.detail?.phone}
-              </a>
-            )}
-            {info.basicInfo?.detail?.linkedin && (
-              <a className={styles.link}>
-                <Linkedin /> {info.basicInfo?.detail?.linkedin}
-              </a>
-            )}
-            {info.basicInfo?.detail?.github && (
-              <a className={styles.link}>
-                <GitHub /> {info.basicInfo?.detail?.github}
-              </a>
-            )}
+          {info.basicInfo?.detail?.email && (
+            <a className={styles.link} href={`mailto:${info.basicInfo?.detail?.email}`} type="email">
+              <AtSign /> Email
+            </a>
+          )}
+          {info.basicInfo?.detail?.phone && (
+            <a className={styles.link} href={`tel:${info.basicInfo?.detail?.phone}`}>
+              <Phone /> {info.basicInfo?.detail?.phone}
+            </a>
+          )}
+          {info.basicInfo?.detail?.linkedin && (
+            <a className={styles.link} href={info.basicInfo?.detail?.linkedin}>
+              <Linkedin /> LinkedIn
+            </a>
+          )}
+          {info.basicInfo?.detail?.github && (
+            <a className={styles.link} href={info.basicInfo?.detail?.github}>
+              <GitHub /> GitHub
+            </a>
+          )}
           </div>
         </div>
         <div className={styles.main}>

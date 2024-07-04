@@ -104,6 +104,11 @@
   gap: 5px;
 }
 
+.other {
+  margin-left: 20px;
+  text-align: left;
+}
+
 .points {
   list-style-type: disc;
   padding-left: 20px;
@@ -113,7 +118,6 @@
 
 .point {
   font-size: 14px;
-  margin-bottom: 5px;
   text-align: left;
 }
 
@@ -128,4 +132,27 @@
   font-weight: bold;
   text-align: left;
   padding-left: 20px;
+}
+
+.achievementItem {
+  text-align: left; 
+}
+
+.achievementTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left; 
+}
+
+.achievementOverview {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  text-align: left; 
+  padding-left: 20px;
+}
+
+.achievementItem .points {
+  font-size: 14px;
 }

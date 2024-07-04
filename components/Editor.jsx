@@ -335,34 +335,36 @@ function Editor(props) {
           </div>
         );
         case sections.other:
-          return (
-            <div className={styles.detail}>
-              <label>Other</label>
-              <ul>
-                {values.other && values.other.map((item, index) => (
-                  <li key={index}>
-                    <InputControl
-                      value={item}
-                      placeholder={`Item ${index + 1}`}
-                      onChange={(event) => {
-                        const newOther = [...values.other];
-                        newOther[index] = event.target.value;
-                        setValues((prev) => ({ ...prev, other: newOther }));
-                      }}
-                    />
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => {
-                  const newOther = [...(values.other || []), ""];
-                  setValues((prev) => ({ ...prev, other: newOther }));
-                }}
-              >
-                Add Item
-              </button>
-            </div>
-          );
+  return (
+    <div className={styles.detail}>
+      <label>Other</label>
+      <ul className={styles.points}>
+        {values.other && values.other.map((item, index) => (
+          <li key={index} className={styles.point}>
+            <InputControl
+              value={item}
+              placeholder={`Item ${index + 1}`}
+              onChange={(event) => {
+                const newOther = [...values.other];
+                newOther[index] = event.target.value;
+                setValues((prev) => ({ ...prev, other: newOther }));
+              }}
+            />
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={() => {
+          const newOther = [...(values.other || []), ""];
+          setValues((prev) => ({ ...prev, other: newOther }));
+        }}
+      >
+        Add Item
+      </button>
+    </div>
+  );
+
+
       case sections.positionOfResponsibility:
         return (
           <div className={styles.detail}>
@@ -502,22 +504,18 @@ function Editor(props) {
         break;
       }
       case sections.achievement: {
-        const tempDetails = [...information[sections.achievement]?.points];
-        tempDetails[activeDetailIndex] = {
-          overview: values.overview,
+        const updatedAchievement = {
+          ...information[sections.achievement],
+          details: [...information[sections.achievement].details, { title: values.title, overview: values.overview, points: values.points }],
         };
-
+        
         setInformation((prev) => ({
           ...prev,
-          [sections.achievement]: {
-            ...prev[sections.achievement],
-            points: tempDetails,
-            sectionTitle,
-          },
+          [sections.achievement]: updatedAchievement,
         }));
         break;
       }
-      
+
       case sections.other: {
         const tempDetail = values.other;
       
@@ -525,13 +523,14 @@ function Editor(props) {
           ...prev,
           [sections.other]: {
             ...prev[sections.other],
-            detail: tempDetail,
+            details: tempDetail,
             sectionTitle,
           },
         }));
         break;
 
       }
+
       case sections.positionOfResponsibility: {
         const tempDetailsPOR = [...information[sections.positionOfResponsibility]?.details];
         tempDetailsPOR[activeDetailIndex] = {

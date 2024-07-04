@@ -46,7 +46,7 @@ function Body() {
     [sections.achievement]: {
       id: sections.achievement,
       sectionTitle: sections.achievement,
-      points: [],
+      details: [],
     },
     [sections.positionOfResponsibility]: { 
       id: sections.positionOfResponsibility,
