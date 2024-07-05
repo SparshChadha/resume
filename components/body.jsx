@@ -56,7 +56,7 @@ function Body() {
     [sections.other]: {
       id: sections.other,
       sectionTitle: sections.other,
-      detail: "",
+      detail: [],
     },
   });
 

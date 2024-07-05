@@ -39,10 +39,10 @@ function Editor(props) {
       endYear: activeInfo?.detail?.endYear || "",
       points: activeInfo?.details ? activeInfo.details[0]?.points || "":"",
       position: typeof activeInfo?.detail !== "object" ? activeInfo.detail : "",
-      other: typeof activeInfo?.detail !== "object" ? activeInfo.detail : "",
+
     });
   }, [activeSectionKey, information, sections]);
-
+  
   useEffect(() => {
     const details = activeInformation?.details;
     if (!details) return;
@@ -64,7 +64,7 @@ function Editor(props) {
       position: activeInfo.details[activeDetailIndex]?.position || "",
       linkedin: activeInfo.details[activeDetailIndex]?.linkedin || "",
       github: activeInfo.details[activeDetailIndex]?.github || "",
-      college: activeInfo.details[activeDetailIndex]?.college || "",
+      college: activeInfo.details[activeDetailIndex]?.college || ""
     });
   }, [activeDetailIndex, activeInformation, sections]);
 
@@ -335,34 +335,33 @@ function Editor(props) {
           </div>
         );
         case sections.other:
-  return (
-    <div className={styles.detail}>
-      <label>Other</label>
-      <ul className={styles.points}>
-        {values.other && values.other.map((item, index) => (
-          <li key={index} className={styles.point}>
-            <InputControl
-              value={item}
-              placeholder={`Item ${index + 1}`}
-              onChange={(event) => {
-                const newOther = [...values.other];
-                newOther[index] = event.target.value;
-                setValues((prev) => ({ ...prev, other: newOther }));
-              }}
-            />
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={() => {
-          const newOther = [...(values.other || []), ""];
-          setValues((prev) => ({ ...prev, other: newOther }));
-        }}
-      >
-        Add Item
-      </button>
-    </div>
-  );
+        return (
+          <div className={styles.detail}>
+            <div className={styles.column}>
+              <label>Enter other details</label>
+              <InputControl
+                placeholder="Line 1"
+                value={values.points ? values.points[0] : ""}
+                onChange={(event) => handlePointUpdate(event.target.value, 0)}
+              />
+              <InputControl
+                placeholder="Line 2"
+                value={values.points ? values.points[1] : ""}
+                onChange={(event) => handlePointUpdate(event.target.value, 1)}
+              />
+              <InputControl
+                placeholder="Line 3"
+                value={values.points ? values.points[2] : ""}
+                onChange={(event) => handlePointUpdate(event.target.value, 2)}
+              />
+              <InputControl
+                placeholder="Line 4"
+                value={values.points ? values.points[3] : ""}
+                onChange={(event) => handlePointUpdate(event.target.value, 3)}
+              />
+            </div>
+          </div>
+        );
 
 
       case sections.positionOfResponsibility:
@@ -517,20 +516,24 @@ function Editor(props) {
       }
 
       case sections.other: {
-        const tempDetail = values.other;
+        const tempDetails = [...information[sections.other]?.details];
+        tempDetails[activeDetailIndex] = {
+          ...tempDetails[activeDetailIndex],
+          points: values.points,
+        };
       
         setInformation((prev) => ({
           ...prev,
           [sections.other]: {
             ...prev[sections.other],
-            details: tempDetail,
+            details: tempDetails,
             sectionTitle,
           },
         }));
         break;
 
       }
-
+      
       case sections.positionOfResponsibility: {
         const tempDetailsPOR = [...information[sections.positionOfResponsibility]?.details];
         tempDetailsPOR[activeDetailIndex] = {

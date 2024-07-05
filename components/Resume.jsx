@@ -12,8 +12,7 @@ import {
 import styles from "./Resume.module.css";
 
 const Resume = forwardRef((props, ref) => {
-  const information = props.information;
-  const sections = props.sections;
+  const { information, sections } = props;
   const containerRef = useRef();
 
   const info = {
@@ -24,7 +23,7 @@ const Resume = forwardRef((props, ref) => {
     basicInfo: information[sections.basicInfo],
     positionOfResponsibility: information[sections.positionOfResponsibility],
     other: information[sections.other],
-  };
+  };  
 
   const getFormattedDate = (value) => {
     if (!value) return "";
@@ -175,13 +174,15 @@ const Resume = forwardRef((props, ref) => {
       >
         <div className={styles.sectionTitle}>{info.other.sectionTitle}</div>
         <div className={styles.content}>
-          <ul className={styles.points}>
-            {info?.other?.details && info.other.details.map((detail, index) => (
-              <li key={index} className={styles.point}>
-                {detail}
-              </li>
-            ))}
-          </ul>
+          {info.other?.details?.map((item, index) => (
+            <ul className={styles.points} key={index}>
+              {item.details.map((elem, index) => (
+                <li className={styles.point} key={index}>
+                  {elem.details}
+                </li>
+              ))}
+            </ul>
+          ))}
         </div>
       </div>
     ),
@@ -197,11 +198,13 @@ const Resume = forwardRef((props, ref) => {
             <div className={styles.item} key={index}>
               <div className={styles.itemHeader}>
                 <p className={styles.title}>{item.title}</p>
+                <p className={styles.position}>{item.position}</p>
               </div>
+              <div className={styles.overview}>{item.overview}</div>
               {item.points?.length > 0 && (
                 <ul className={styles.points}>
                   {item.points
-                    .filter((point) => point) // Filter out empty points
+                    .filter((point) => point) 
                     .map((elem, index) => (
                       <li className={styles.point} key={index}>
                         {elem}
