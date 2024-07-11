@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Meet Our Distinguished Alumni</h1>
+      
       <TabComponent />
     </div>
   )
